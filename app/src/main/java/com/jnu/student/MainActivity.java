@@ -1,6 +1,10 @@
 package com.jnu.student;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,51 +17,36 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class MainActivity extends AppCompatActivity {
-    private String []tabHeaderStrings = {"Shopping items","baidu maps","News"};
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private Button option1Button, option2Button, option3Button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // 获取ViewPager2和TabLayout的实例
-        ViewPager2 viewPager = findViewById(R.id.view_pager);
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        // 创建适配器
-        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), getLifecycle());
-        viewPager.setAdapter(fragmentAdapter);
+        option1Button = findViewById(R.id.option1Button);
+        option2Button = findViewById(R.id.option2Button);
+        option3Button = findViewById(R.id.option3Button);
 
+        option1Button.setOnClickListener(this);
+        option2Button.setOnClickListener(this);
+        option3Button.setOnClickListener(this);
 
-        // 将TabLayout和ViewPager2进行关联
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText(tabHeaderStrings[position])
-        ).attach();
+    }
+    @Override
+    public void onClick(View v) {
+        int viewId = v.getId();
+        if (viewId == R.id.option1Button) {
+            Toast.makeText(this, "选项1被点击", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, TargetActivity.class);
+            startActivity(intent);
+        } else if (viewId == R.id.option2Button) {
+            Toast.makeText(this, "选项2被点击", Toast.LENGTH_SHORT).show();
+
+        } else if (viewId == R.id.option3Button) {
+            Toast.makeText(this, "选项3被点击", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
-    public class FragmentAdapter extends FragmentStateAdapter {
-        private static final int NUM_TABS = 3;
-        public FragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
-            super(fragmentManager, lifecycle);
-        }
-
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            // 根据位置返回对应的Fragment实例
-            switch (position) {
-                case 0:
-                    return new ShoppingListFragment();
-                case 1:
-                    return new BaiduMapFragment();
-                case 2:
-                    return new WebViewFragment();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return NUM_TABS;
-        }
-    }
 }
