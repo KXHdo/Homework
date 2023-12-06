@@ -1,6 +1,7 @@
 package com.jnu.student.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.FileInputStream;
@@ -40,5 +41,21 @@ public class DataBank {
             e.printStackTrace();
 
         }
+    }
+    private static final String PREFERENCES_FILE = "com.jnu.student.preferences";
+    private static final String SCORE_KEY = "Score";
+
+    // 加载得分
+    public int loadScore(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return prefs.getInt(SCORE_KEY, 0); // 默认值为 0
+    }
+
+    // 保存得分
+    public void saveScore(Context context, int score) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(SCORE_KEY, score);
+        editor.apply();
     }
 }

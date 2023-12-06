@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class TargetActivity extends AppCompatActivity {
-    private String []tabHeaderStrings = {"Sho ","baidu","News"};
+    private String []tabHeaderStrings = {"日常任务","每周任务","完成记录"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

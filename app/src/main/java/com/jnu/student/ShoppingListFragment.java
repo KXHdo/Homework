@@ -186,9 +186,9 @@ public class ShoppingListFragment extends Fragment {
                                             ContextMenu.ContextMenuInfo menuInfo) {
                 menu.setHeaderTitle("具体操作");
 
-                menu.add(0, 0, this.getAdapterPosition(), "添加" + this.getAdapterPosition());
-                menu.add(0, 1, this.getAdapterPosition(), "删除" + this.getAdapterPosition());
-                menu.add(0, 2, this.getAdapterPosition(), "修改" + this.getAdapterPosition());
+                menu.add(0, 0, this.getAdapterPosition(), "添加任务" );
+                menu.add(0, 1, this.getAdapterPosition(), "删除任务" );
+                menu.add(0, 2, this.getAdapterPosition(), "修改任务" );
             }
 
             public ViewHolder(View shopItemView) {

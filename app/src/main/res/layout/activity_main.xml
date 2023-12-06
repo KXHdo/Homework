@@ -42,4 +42,13 @@
             android:text="我" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/scoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score: 0"
+        android:textSize="18sp"
+        android:layout_centerInParent="true" />
+
 </RelativeLayout>
