@@ -46,16 +46,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         score = dataBank.loadScore(this); // 加载得分
         updateScoreTextView();
 
-
     }
     private void updateScoreTextView() {
         score = dataBank.loadScore(this);
         scoreTextView.setText("Score: " + score);
-    }
-    public void completeTask() {
-        scoreItem.setScore(scoreItem.getScore() + 1);
-        dataBank.saveScore(this, scoreItem.getScore()); // 保存新的得分
-        updateScoreTextView(); // 更新 TextView
     }
     @Override
     public void onClick(View v) {
@@ -64,13 +58,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "选项1被点击", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, TargetActivity.class);
             startActivity(intent);
+
         } else if (viewId == R.id.option2Button) {
             Toast.makeText(this, "选项2被点击", Toast.LENGTH_SHORT).show();
-            completeTask();
+
         } else if (viewId == R.id.option3Button) {
             Toast.makeText(this, "选项3被点击", Toast.LENGTH_SHORT).show();
-
+            Intent intent = new Intent(this, UserProfileActivity.class);
+            startActivity(intent);
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateScoreTextView();
+        // 在这里更新分数布局的代码
     }
 
 }

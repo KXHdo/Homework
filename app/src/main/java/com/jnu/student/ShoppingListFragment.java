@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,9 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.jnu.student.data.DataBank;
+import com.jnu.student.data.ScoreItem;
 import com.jnu.student.data.ShopItem;
 
 import java.util.ArrayList;
@@ -125,8 +128,7 @@ public class ShoppingListFragment extends Fragment {
     }
     private ArrayList<ShopItem> shopItems = new ArrayList<>();
     private ShopItemAdapter shopItemAdapter;
-
-
+    private ScoreItem scoreItem;
     ActivityResultLauncher<Intent> addItemLauncher;
     ActivityResultLauncher<Intent> updateItemLauncher;
 
@@ -134,15 +136,42 @@ public class ShoppingListFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 0:
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
+                builder1.setTitle("完成任务");
+                builder1.setMessage("你确定完成该任务吗?");
+                builder1.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ShopItem shopItem= shopItems.get(item.getOrder());
+
+                        int currentScore =new DataBank().loadScore(requireActivity());
+                        int newScore = currentScore + (int)shopItem.getPrice();
+                        new DataBank().saveScore(requireActivity(), newScore);
+
+
+                        shopItems.remove(item.getOrder());
+                        shopItemAdapter.notifyItemRemoved(item.getOrder());
+
+                        new DataBank().SaveShopItems(requireActivity(), shopItems);
+                    }
+                });
+                builder1.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder1.create().show();
+                break;
+            case 1:
 
                 Intent intent = new Intent(requireActivity(), ShopItemDetailsActivity.class);
                 addItemLauncher.launch(intent);
                 break;
-            case 1:
+            case 2:
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                builder.setTitle("Delete Data");
-                builder.setMessage("Are you sure you want to delete this data?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                builder.setTitle("删除任务");
+                builder.setMessage("你确定要删除该任务吗?");
+                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         shopItems.remove(item.getOrder());
@@ -151,14 +180,14 @@ public class ShoppingListFragment extends Fragment {
                         new DataBank().SaveShopItems(requireActivity(), shopItems);
                     }
                 });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
                 builder.create().show();
                 break;
-            case 2:
+            case 3:
                 Intent intentUpdate = new Intent(requireActivity(), ShopItemDetailsActivity.class);
                 ShopItem shopItem= shopItems.get(item.getOrder());
                 intentUpdate.putExtra("name",shopItem.getName());
@@ -185,10 +214,10 @@ public class ShoppingListFragment extends Fragment {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
                 menu.setHeaderTitle("具体操作");
-
-                menu.add(0, 0, this.getAdapterPosition(), "添加任务" );
-                menu.add(0, 1, this.getAdapterPosition(), "删除任务" );
-                menu.add(0, 2, this.getAdapterPosition(), "修改任务" );
+                menu.add(0, 0, this.getAdapterPosition(), "完成任务" );
+                menu.add(0, 1, this.getAdapterPosition(), "添加任务" );
+                menu.add(0, 2, this.getAdapterPosition(), "删除任务" );
+                menu.add(0, 3, this.getAdapterPosition(), "修改任务" );
             }
 
             public ViewHolder(View shopItemView) {

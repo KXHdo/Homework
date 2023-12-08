@@ -18,6 +18,7 @@ public class ShopItem implements Serializable {
     }
 
     private String name;
+
     private double price;
 
     public ShopItem(String name_, double price_, int imageResourceId_) {

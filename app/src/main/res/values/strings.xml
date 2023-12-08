@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">我的第一个应用</string>.
+    <string name="app_name">时间管理大师</string>.
     <string name="text_hello_android">你好Android</string>
     <string name="text_1">Hello</string>
     <string name="text_2">JNU</string>
