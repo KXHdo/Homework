@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int viewId = v.getId();
         if (viewId == R.id.option1Button) {
-            Toast.makeText(this, "选项1被点击", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "选项1被点击", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, TargetActivity.class);
             startActivity(intent);
 
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "选项2被点击", Toast.LENGTH_SHORT).show();
 
         } else if (viewId == R.id.option3Button) {
-            Toast.makeText(this, "选项3被点击", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "选项3被点击", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, UserProfileActivity.class);
             startActivity(intent);
         }

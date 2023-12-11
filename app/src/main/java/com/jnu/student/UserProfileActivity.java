@@ -27,7 +27,7 @@ public class UserProfileActivity extends AppCompatActivity {
         TextView userNameView = findViewById(R.id.userName);
         resetScoreButton = findViewById(R.id.resetScoreButton);
 
-        String userName = "美味的GGbond";
+        String userName = "大哥拿大哥大";
         score = dataBank.loadScore(this);
         userScoreView.setText("分数: " + score);
         userNameView.setText(userName);

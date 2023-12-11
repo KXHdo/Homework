@@ -28,20 +28,18 @@ import android.widget.Toast;
 import com.jnu.student.data.CompletedTask;
 import com.jnu.student.data.DataBank;
 import com.jnu.student.data.ScoreItem;
-import com.jnu.student.data.ShopItem;
+import com.jnu.student.data.TargetWeekly;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-
-public class ShoppingListFragment extends Fragment {
-
-    public ShoppingListFragment() {
+public class TargetWeeklyFragment extends Fragment {
+    public TargetWeeklyFragment() {
         // Required empty public constructor
     }
 
-    public static ShoppingListFragment newInstance() {
-        ShoppingListFragment fragment = new ShoppingListFragment();
+    public static TargetWeeklyFragment newInstance() {
+        TargetWeeklyFragment fragment = new TargetWeeklyFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -54,50 +52,53 @@ public class ShoppingListFragment extends Fragment {
         if (getArguments() != null) {
         }
     }
-    private ActivityResultLauncher<Intent> addItemLauncher;
-    private ActivityResultLauncher<Intent> updateItemLauncher;
+    private ActivityResultLauncher<Intent> addItemLauncher2;
+    private ActivityResultLauncher<Intent> updateItemLauncher2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_target_weekly, container, false);
 
-        RecyclerView mainRecyclerView = rootView.findViewById(R.id.recyclerview_main);
-
-
-        registerForContextMenu(mainRecyclerView);
-        Log.d("Serialization", "registerShopping");
-        shopItems = new DataBank().LoadShopItems(requireActivity());
-        if(0 == shopItems.size()) {
-            shopItems.add(new ShopItem("添加任务", 0.0, R.drawable.taskphoto));
-        }
-
-        shopItemAdapter = new ShopItemAdapter(shopItems);
-        mainRecyclerView.setAdapter(shopItemAdapter);
+        RecyclerView mainRecyclerView = rootView.findViewById(R.id.recyclerview_target_weekly);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        addItemLauncher = registerForActivityResult(
+
+
+        targetWeeklies = new DataBank().LoadTargetWeeklies(requireActivity());
+
+        if(0 == targetWeeklies.size()) {
+            targetWeeklies.add(new TargetWeekly("添加任务", 0.0, R.drawable.taskphoto));
+        }
+
+
+        targetWeeklyAdapter = new TargetWeeklyAdapter(targetWeeklies);
+        mainRecyclerView.setAdapter(targetWeeklyAdapter);
+        registerForContextMenu(mainRecyclerView);
+
+        addItemLauncher2 = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
+                        Log.d("Serialization", "3");
                         String name = data.getStringExtra("name"); // 获取返回的数据
                         String priceText = data.getStringExtra("price"); // 获取返回的数据
 
                         double price= Double.parseDouble(priceText);
-                        shopItems.add(new ShopItem(name, price, R.drawable.taskphoto));
-                        shopItemAdapter.notifyItemInserted(shopItems.size());
-
-
-                        new DataBank().SaveShopItems(requireActivity(), shopItems);
-                        Log.d("Serialization", "ShoppinglistFragment add");
+                        targetWeeklies.add(new TargetWeekly(name, price, R.drawable.taskphoto));
+                        targetWeeklyAdapter.notifyItemInserted(targetWeeklies.size());
+                        Log.d("Serialization", "4");
+                        new DataBank().SaveTargetWeeklies(requireActivity(), targetWeeklies);
+                        Log.d("Serialization", "2Data loaded successfully.item count "+targetWeeklies.size());
 
                     } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                         // 处理取消操作
                     }
                 }
         );
-        updateItemLauncher = registerForActivityResult(
+        updateItemLauncher2 = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
@@ -107,34 +108,34 @@ public class ShoppingListFragment extends Fragment {
                         String priceText = data.getStringExtra("price"); // 获取返回的数据
 
                         double price= Double.parseDouble(priceText);
-                        ShopItem shopItem = shopItems.get(position);
-                        shopItem.setPrice(price);
-                        shopItem.setName(name);
-                        shopItemAdapter.notifyItemChanged(position);
+                        TargetWeekly targetWeekly = targetWeeklies.get(position);
+                        targetWeekly.setPrice(price);
+                        targetWeekly.setName(name);
+                        targetWeeklyAdapter.notifyItemChanged(position);
+                        Log.d("Serialization", "2Data loaded successfully.item count "+targetWeeklies.size());
+                        new DataBank().SaveTargetWeeklies(requireActivity(), targetWeeklies);
 
-                        new DataBank().SaveShopItems(requireActivity(), shopItems);
-                        Log.d("Serialization", "ShoppinglistFragment update");
 
                     } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                         // 处理取消操作
                     }
                 }
         );
+
         return rootView;
     }
 
-    private ArrayList<ShopItem> shopItems = new ArrayList<>();
-    private ShopItemAdapter shopItemAdapter;
+    private ArrayList<TargetWeekly> targetWeeklies = new ArrayList<>();
+    private TargetWeeklyAdapter targetWeeklyAdapter;
     private ScoreItem scoreItem;
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (item.getGroupId() != 0)
+        if (item.getGroupId() != 1)
         {
-            Log.d("Serialization", "shoppingFalse");
+            Log.d("Serialization", "False");
             return false;
         }
-        Log.d("Serialization", "onContextItemSelected in " + this.getClass().getSimpleName());
         switch (item.getItemId()) {
             case 0:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
@@ -143,20 +144,20 @@ public class ShoppingListFragment extends Fragment {
                 builder1.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ShopItem shopItem= shopItems.get(item.getOrder());
+                        TargetWeekly targetWeekly= targetWeeklies.get(item.getOrder());
 
                         int currentScore =new DataBank().loadScore(requireActivity());
-                        int newScore = currentScore + (int)shopItem.getPrice();
+                        int newScore = currentScore + (int)targetWeekly.getPrice();
                         new DataBank().saveScore(requireActivity(), newScore);
                         updateScoreInView(newScore);
 
-                        CompletedTask completedTask = new CompletedTask(shopItem.getName(), shopItem.getPrice(), shopItem.getImageResourceId(), new Date());
+                        CompletedTask completedTask = new CompletedTask(targetWeekly.getName(), targetWeekly.getPrice(), targetWeekly.getImageResourceId(), new Date());
                         new DataBank().saveCompletedTask(requireActivity(), completedTask);
 
-                        shopItems.remove(item.getOrder());
-                        shopItemAdapter.notifyItemRemoved(item.getOrder());
+                        targetWeeklies.remove(item.getOrder());
+                        targetWeeklyAdapter.notifyItemRemoved(item.getOrder());
 
-                        new DataBank().SaveShopItems(requireActivity(), shopItems);
+                        new DataBank().SaveTargetWeeklies(requireActivity(), targetWeeklies);
                     }
                 });
                 builder1.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -167,11 +168,12 @@ public class ShoppingListFragment extends Fragment {
                 builder1.create().show();
                 break;
             case 1:
+                Log.d("Serialization", "1");
+                Intent intent = new Intent(requireActivity(), TargetWeeklyDetailsActivity.class);
+                Log.d("Serialization", "2");
+                addItemLauncher2.launch(intent);
 
-                Intent intent = new Intent(requireActivity(), ShopItemDetailsActivity.class);
-                addItemLauncher.launch(intent);
                 break;
-
             case 2:
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 builder.setTitle("删除任务");
@@ -179,10 +181,10 @@ public class ShoppingListFragment extends Fragment {
                 builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        shopItems.remove(item.getOrder());
-                        shopItemAdapter.notifyItemRemoved(item.getOrder());
+                        targetWeeklies.remove(item.getOrder());
+                        targetWeeklyAdapter.notifyItemRemoved(item.getOrder());
 
-                        new DataBank().SaveShopItems(requireActivity(), shopItems);
+                        new DataBank().SaveTargetWeeklies(requireActivity(), targetWeeklies);
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -193,12 +195,12 @@ public class ShoppingListFragment extends Fragment {
                 builder.create().show();
                 break;
             case 3:
-                Intent intentUpdate = new Intent(requireActivity(), ShopItemDetailsActivity.class);
-                ShopItem shopItem= shopItems.get(item.getOrder());
-                intentUpdate.putExtra("name",shopItem.getName());
-                intentUpdate.putExtra("price",shopItem.getPrice());
+                Intent intentUpdate = new Intent(requireActivity(), TargetWeeklyDetailsActivity.class);
+                TargetWeekly targetWeekly= targetWeeklies.get(item.getOrder());
+                intentUpdate.putExtra("name",targetWeekly.getName());
+                intentUpdate.putExtra("price",targetWeekly.getPrice());
                 intentUpdate.putExtra("position",item.getOrder());
-                updateItemLauncher.launch(intentUpdate);
+                updateItemLauncher2.launch(intentUpdate);
                 break;
             default:
                 return super.onContextItemSelected(item);
@@ -206,9 +208,9 @@ public class ShoppingListFragment extends Fragment {
         return true;
     }
 
-    public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.ViewHolder> {
+    public class TargetWeeklyAdapter extends RecyclerView.Adapter<TargetWeeklyAdapter.ViewHolder> {
 
-        private ArrayList<ShopItem> shopItemArrayList;
+        private ArrayList<TargetWeekly> targetWeeklyArrayList;
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
             private final TextView textViewName;
@@ -219,20 +221,20 @@ public class ShoppingListFragment extends Fragment {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
                 menu.setHeaderTitle("具体操作");
-                menu.add(0, 0, this.getAdapterPosition(), "完成任务" );
-                menu.add(0, 1, this.getAdapterPosition(), "添加任务" );
-                menu.add(0, 2, this.getAdapterPosition(), "删除任务" );
-                menu.add(0, 3, this.getAdapterPosition(), "修改任务" );
+                menu.add(1, 0, this.getAdapterPosition(), "完成任务" );
+                menu.add(1, 1, this.getAdapterPosition(), "添加任务" );
+                menu.add(1, 2, this.getAdapterPosition(), "删除任务" );
+                menu.add(1, 3, this.getAdapterPosition(), "修改任务" );
             }
 
-            public ViewHolder(View shopItemView) {
-                super(shopItemView);
+            public ViewHolder(View targetWeeklyView) {
+                super(targetWeeklyView);
                 // Define click listener for the ViewHolder's View
 
-                textViewName = shopItemView.findViewById(R.id.textview_item_name);
-                textViewPrice = shopItemView.findViewById(R.id.textview_item_price);
-                imageViewItem = shopItemView.findViewById(R.id.imageview_item);
-                shopItemView.setOnCreateContextMenuListener(this);
+                textViewName = targetWeeklyView.findViewById(R.id.textview_item_name);
+                textViewPrice = targetWeeklyView.findViewById(R.id.textview_item_price);
+                imageViewItem = targetWeeklyView.findViewById(R.id.imageview_item);
+                targetWeeklyView.setOnCreateContextMenuListener(this);
             }
 
             public TextView getTextViewName() {
@@ -248,8 +250,8 @@ public class ShoppingListFragment extends Fragment {
             }
         }
 
-        public ShopItemAdapter(ArrayList<ShopItem> shopItems) {
-            shopItemArrayList = shopItems;
+        public TargetWeeklyAdapter(ArrayList<TargetWeekly> targetWeeklies) {
+            targetWeeklyArrayList = targetWeeklies;
         }
 
         // Create new views (invoked by the layout manager)
@@ -257,7 +259,7 @@ public class ShoppingListFragment extends Fragment {
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             // Create a new view, which defines the UI of the list item
             View view = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.shop_item_row, viewGroup, false);
+                    .inflate(R.layout.target_weekly_row, viewGroup, false);
             //view.setBackgroundColor(Color.rgb(204,204,204));
             return new ViewHolder(view);
         }
@@ -265,19 +267,18 @@ public class ShoppingListFragment extends Fragment {
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-            viewHolder.getTextViewName().setText(shopItemArrayList.get(position).getName());
+            viewHolder.getTextViewName().setText(targetWeeklyArrayList.get(position).getName());
             viewHolder.getTextViewName().setTextColor(Color.BLACK);
-            viewHolder.getTextViewPrice().setText("+"+(int)shopItemArrayList.get(position).getPrice());
+            viewHolder.getTextViewPrice().setText("+"+(int)targetWeeklyArrayList.get(position).getPrice());
             viewHolder.getTextViewPrice().setTextColor(Color.rgb(0,180,51));
-            viewHolder.getImageViewItem().setImageResource(shopItemArrayList.get(position).getImageResourceId());
+            viewHolder.getImageViewItem().setImageResource(targetWeeklyArrayList.get(position).getImageResourceId());
         }
 
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return shopItemArrayList.size();
+            return targetWeeklyArrayList.size();
         }
-
     }
     private void updateScoreInView(int newScore) {
         Activity activity = getActivity();

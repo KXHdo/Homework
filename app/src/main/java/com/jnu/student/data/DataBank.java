@@ -22,7 +22,7 @@ public class DataBank {
             data = (ArrayList<ShopItem>) objectIn.readObject();
             objectIn.close();
             fileIn.close();
-            Log.d("Serialization", "Data loaded successfully.item count" + data.size());
+            Log.d("Serialization", "1Data loaded successfully.item count" + data.size());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -36,12 +36,44 @@ public class DataBank {
             out.writeObject(shopItems);
             out.close();
             fileOut.close();
-            Log.d("Serialization", "Data is serialized and saved.");
+            Log.d("Serialization", "1Data is serialized and saved.");
         } catch (IOException e) {
             e.printStackTrace();
 
         }
     }
+    final String DATA_FILENAME2 = "targetweeklies.data";
+
+    public ArrayList<TargetWeekly> LoadTargetWeeklies(Context context) {
+        ArrayList<TargetWeekly> data = new ArrayList<>();
+        try {
+            FileInputStream fileIn = context.openFileInput(DATA_FILENAME2);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            data = (ArrayList<TargetWeekly>) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+            Log.d("Serialization", "2Data loaded successfully.item count" + data.size());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public void SaveTargetWeeklies(Context context, ArrayList<TargetWeekly> targetWeeklies) {
+        try {
+            FileOutputStream fileOut = context.openFileOutput(DATA_FILENAME2, Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(targetWeeklies);
+            out.close();
+            fileOut.close();
+            Log.d("Serialization", "2Data is serialized and saved.");
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+
     private static final String PREFERENCES_FILE = "com.jnu.student.preferences";
     private static final String SCORE_KEY = "Score";
 
@@ -58,4 +90,51 @@ public class DataBank {
         editor.putInt(SCORE_KEY, score);
         editor.apply();
     }
+
+    private static final String COMPLETED_TASKS_FILE = "completed_tasks.data";
+    public void saveCompletedTask(Context context, CompletedTask completedTask) {
+        ArrayList<CompletedTask> completedTasks = loadCompletedTasks(context);
+        completedTasks.add(completedTask);
+
+        try {
+            FileOutputStream fileOut = context.openFileOutput(COMPLETED_TASKS_FILE, Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(completedTasks);
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<CompletedTask> loadCompletedTasks(Context context) {
+        ArrayList<CompletedTask> completedTasks;
+
+        try {
+            FileInputStream fileIn = context.openFileInput(COMPLETED_TASKS_FILE);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            completedTasks = (ArrayList<CompletedTask>) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            completedTasks = new ArrayList<>(); // 如果无法加载数据，则创建一个新的空列表
+        }
+
+        return completedTasks;
+    }
+    public void clearCompletedTasks(Context context) {
+        ArrayList<CompletedTask> emptyList = new ArrayList<>();
+
+        try {
+            FileOutputStream fileOut = context.openFileOutput(COMPLETED_TASKS_FILE, Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(emptyList); // 保存空列表
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -6,53 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".ShopItemDetailsActivity">
 
-    <TextView
-        android:id="@+id/textview_show_item_name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
-        android:text="@string/string_item_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/edittext_item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintTop_toTopOf="@+id/textview_show_item_name"
-        tools:layout_editor_absoluteX="159dp"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/textview_show_item_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:text="@string/string_item_price"
-        app:layout_constraintStart_toStartOf="@+id/textview_show_item_name"
-        app:layout_constraintTop_toTopOf="@+id/textview_show_item_name" />
-
-    <EditText
-        android:id="@+id/edittext_item_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        app:layout_constraintStart_toStartOf="@+id/edittext_item_name"
-        app:layout_constraintTop_toTopOf="@+id/textview_show_item_price" />
-
-    <Button
-        android:id="@+id/button_item_details_ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
-        android:text="@string/string_ok"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 第一行：名称标签和输入框 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/textview_show_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/string_item_name"
+                android:textSize="20sp"
+                android:layout_marginEnd="8dp"/>
+
+            <EditText
+                android:id="@+id/edittext_item_name"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="任务"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <!-- 第二行：价格标签和输入框 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/textview_show_item_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/string_item_price"
+                android:textSize="20sp"
+                android:layout_marginEnd="8dp"/>
+
+            <EditText
+                android:id="@+id/edittext_item_price"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <!-- 确认按钮 -->
+        <Button
+            android:id="@+id/button_item_details_ok"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:text="@string/string_ok"
+            android:textSize="20sp" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

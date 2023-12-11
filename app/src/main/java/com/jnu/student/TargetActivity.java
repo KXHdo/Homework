@@ -1,7 +1,9 @@
 package com.jnu.student;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.jnu.student.data.DataBank;
 
 public class TargetActivity extends AppCompatActivity {
     private String []tabHeaderStrings = {"日常任务","每周任务","完成记录"};
@@ -25,6 +28,13 @@ public class TargetActivity extends AppCompatActivity {
         // 获取ViewPager2和TabLayout的实例
         ViewPager2 viewPager = findViewById(R.id.view_pager);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
+
+        TextView scoreTextView = findViewById(R.id.scoreTextView);
+        DataBank dataBank = new DataBank();
+        int score = dataBank.loadScore(this);
+        scoreTextView.setText("分数: " + score);
+        scoreTextView.setTextColor(Color.BLACK);
+        scoreTextView.setTextSize(20);
         // 创建适配器
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(fragmentAdapter);
@@ -50,9 +60,9 @@ public class TargetActivity extends AppCompatActivity {
                 case 0:
                     return new ShoppingListFragment();
                 case 1:
-                    return new BaiduMapFragment();
+                    return new TargetWeeklyFragment();
                 case 2:
-                    return new WebViewFragment();
+                    return new CompletedTasksFragment();
                 default:
                     return null;
             }
