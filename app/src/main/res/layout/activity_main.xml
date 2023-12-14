@@ -1,54 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="0dp"
+    android:background="@drawable/backgroundnew"
     tools:context=".MainActivity">
 
-
-    <LinearLayout
-        android:id="@+id/optionButtonsLayout"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/option1Button"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:layout_margin="0dp"
-        android:padding="0dp">
+        android:text="任务"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/option2Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1" />
 
-        <Button
-            android:id="@+id/option1Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="0dp"
-            android:text="任务" />
+    <Button
+        android:id="@+id/option2Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="奖励"
+        app:layout_constraintStart_toEndOf="@id/option1Button"
+        app:layout_constraintEnd_toStartOf="@id/option3Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1" />
 
-        <Button
-            android:id="@+id/option2Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="0dp"
-            android:text="奖励" />
-
-        <Button
-            android:id="@+id/option3Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="0dp"
-            android:text="我" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/option3Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="我"
+        app:layout_constraintStart_toEndOf="@id/option2Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1" />
 
     <TextView
         android:id="@+id/scoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Score: 0"
+        android:layout_marginStart="228dp"
+        android:layout_marginTop="532dp"
+        android:layout_marginBottom="120dp"
+        android:text="目前你的分数为:0"
         android:textSize="18sp"
-        android:layout_centerInParent="true" />
+        app:layout_constraintBottom_toTopOf="@+id/option2Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+
+    <!-- 在此添加其他控件 -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

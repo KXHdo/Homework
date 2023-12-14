@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataBank {
     final String DATA_FILENAME = "shopitems.data";
@@ -132,6 +133,36 @@ public class DataBank {
             out.writeObject(emptyList); // 保存空列表
             out.close();
             fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final String AWARDS_FILE = "awards.data";
+
+    public ArrayList<AwardItem> LoadAwardItem(Context context) {
+        ArrayList<AwardItem> data = new ArrayList<>();
+        try {
+            FileInputStream fileIn = context.openFileInput(AWARDS_FILE);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            data = (ArrayList<AwardItem>) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+            Log.d("Serialization", "1Data loaded successfully.item count" + data.size());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public void SaveAwardItems(Context context, ArrayList<AwardItem> awardItems) {
+        try {
+            FileOutputStream fileOut = context.openFileOutput(AWARDS_FILE, Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(awardItems);
+            out.close();
+            fileOut.close();
+            Log.d("Serialization", "1Data is serialized and saved.");
         } catch (IOException e) {
             e.printStackTrace();
         }

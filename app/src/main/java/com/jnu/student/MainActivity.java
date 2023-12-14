@@ -1,6 +1,7 @@
 package com.jnu.student;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         option2Button = findViewById(R.id.option2Button);
         option3Button = findViewById(R.id.option3Button);
 
+
         option1Button.setOnClickListener(this);
         option2Button.setOnClickListener(this);
         option3Button.setOnClickListener(this);
@@ -43,13 +45,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scoreItem = new ScoreItem(dataBank.loadScore(this));
         scoreTextView = findViewById(R.id.scoreTextView);
 
+
         score = dataBank.loadScore(this); // 加载得分
         updateScoreTextView();
 
     }
     private void updateScoreTextView() {
         score = dataBank.loadScore(this);
-        scoreTextView.setText("Score: " + score);
+        scoreTextView.setText("目前你的分数为:" + score);
+        scoreTextView.setTextColor(Color.BLACK);
     }
     @Override
     public void onClick(View v) {
@@ -60,8 +64,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
 
         } else if (viewId == R.id.option2Button) {
-            Toast.makeText(this, "选项2被点击", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(this, "选项2被点击", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, AwardActivity.class);
+            startActivity(intent);
         } else if (viewId == R.id.option3Button) {
            // Toast.makeText(this, "选项3被点击", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, UserProfileActivity.class);

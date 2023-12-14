@@ -19,10 +19,16 @@
             android:name=".TargetWeeklyDetailsActivity"
             android:exported="false" />
         <activity
+            android:name=".AwardDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
             android:name=".TargetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AwardActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
